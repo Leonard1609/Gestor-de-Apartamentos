@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor de Apartamentos - Dashboard</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="dashboard-body">
+
+  <div class="app-container">
+    
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>🏢 Panel de Control</h3>
+      </div>
+      
+      <nav class="sidebar-menu">
+        <button class="menu-btn active" data-section="gestion">⚙️ 1. Gestión</button>
+        <button class="menu-btn" data-section="calculo">🧮 2. Cálculo</button>
+        <button class="menu-btn" data-section="registro">📋 3. Registro</button>
+        <button class="menu-btn" data-section="impresion">🖨️ 4. Impresión</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="btn-logout" class="logout-btn">🚪 Cerrar Sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      
+      <section id="sec-gestion" class="content-section">
+        <div class="section-header">
+          <h2>⚙️ Gestión de Inquilinos y Departamentos</h2>
+          <p>Registra, edita o elimina la información de las personas que ocupan las viviendas.</p>
+        </div>
+
+        <div class="crud-container">
+          <div class="card form-card">
+            <h3 id="form-title">📝 Registrar Inquilino</h3>
+            <form id="inquilinoForm">
+              <input type="hidden" id="ins-id">
+
+              <div class="form-group">
+                <label for="ins-nombres">NOMBRES</label>
+                <input type="text" id="ins-nombres" required>
+              </div>
+              <div class="form-group">
+                <label for="ins-apellidos">APELLIDOS</label>
+                <input type="text" id="ins-apellidos" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="ins-genero">GÉNERO</label>
+                <select id="ins-genero" required>
+                  <option value="" disabled selected>Selecciona una opción</option>
+                  <option value="Masculino">Masculino 🧑</option>
+                  <option value="Femenino">Femenino 👩</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="ins-dni">DNI / DOCUMENTO</label>
+                <input type="text" id="ins-dni" required maxlength="8" pattern="\d{8}" title="El DNI debe tener exactamente 8 números.">
+              </div>
+              <div class="form-group">
+                <label for="ins-telefono">TELÉFONO</label>
+                <input type="text" id="ins-telefono" maxlength="9" pattern="9\d{8}" title="El teléfono debe tener 9 dígitos y empezar con 9.">
+              </div>
+              <div class="form-group">
+                <label for="ins-departamento">DEPARTAMENTO / CUARTO</label>
+                <input type="text" id="ins-departamento" required>
+              </div>
+              
+              <div class="form-actions-flex">
+                <button type="submit" id="btn-submit-form" class="btn-save">Guardar Inquilino</button>
+                <button type="button" id="btn-cancel-edit" class="btn-cancel hidden">Cancelar</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card table-card">
+            <h3>📋 Lista de Ocupantes</h3>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Dep.</th>
+                    <th>Inquilino</th>
+                    <th>Género</th>
+                    <th>DNI</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyInquilinos"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-calculo" class="content-section hidden">
+        <div class="section-header">
+          <h2>⚡ Cálculo de Recibos Ponderado</h2>
+          <p>Introduce los montos globales y ajusta los días que habitó cada departamento en el mes.</p>
+        </div>
+
+        <div class="crud-container">
+          <div class="card form-card">
+            <h3>📊 Ingresar Recibos Globales</h3>
+            <form id="calculoForm">
+              <div class="form-group">
+                <label for="calc-mes">MES A CALCULAR</label>
+                <select id="calc-mes" required>
+                  <option value="Enero">Enero</option>
+                  <option value="Febrero">Febrero</option>
+                  <option value="Marzo">Marzo</option>
+                  <option value="Abril">Abril</option>
+                  <option value="Mayo">Mayo</option>
+                  <option value="Junio">Junio</option>
+                  <option value="Julio">Julio</option>
+                  <option value="Agosto">Agosto</option>
+                  <option value="Septiembre">Septiembre</option>
+                  <option value="Octubre">Octubre</option>
+                  <option value="Noviembre">Noviembre</option>
+                  <option value="Diciembre">Diciembre</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="calc-luz">MONTO TOTAL LUZ (S/.)</label>
+                <input type="number" id="calc-luz" step="0.01" required placeholder="0.00">
+              </div>
+
+              <div class="form-group">
+                <label for="calc-agua">MONTO TOTAL AGUA (S/.)</label>
+                <input type="number" id="calc-agua" step="0.01" required placeholder="0.00">
+              </div>
+
+              <button type="button" id="btn-generar-desglose" class="btn-save" style="background: #5865f2;">1. Cargar Departamentos</button>
+            </form>
+          </div>
+
+          <div class="card table-card">
+            <h3>📝 Ajuste de Días y Previsualización</h3>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Dep.</th>
+                    <th>Días Ocupados</th>
+                    <th>Cuota Luz</th>
+                    <th>Cuota Agua</th>
+                    <th>Total a Pagar</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyCalculos"></tbody>
+              </table>
+            </div>
+            <div style="margin-top: 15px; text-align: right; display: flex; justify-content: flex-end; gap: 10px;">
+              <button id="btn-ejecutar-matematica" class="btn-edit" style="display: none; background: #4f545c;">2. Calcular Cuotas</button>
+              <button id="btn-guardar-mes" class="btn-save" style="background: #248046;" disabled>3. Confirmar y Guardar Mes</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-registro" class="content-section hidden">
+        <div class="section-header">
+          <h2>📋 Registro Histórico de Pagos</h2>
+          <p>Consulta el historial completo de consumo y controla quién está al día.</p>
+        </div>
+      </section>
+
+      <section id="sec-impresion" class="content-section hidden">
+        <div class="section-header">
+          <h2>🖨️ Impresión y Envío de Bauchers</h2>
+          <p>Genera recibos físicos limpios o despáchalos directo al WhatsApp de tus inquilinos.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="../js/components.js"></script>
+</body>
+</html>

@@ -22,31 +22,34 @@ function crearTablas() {
       password TEXT NOT NULL
     )`);
 
-    // 2. Tabla de Inquilinos (Área 1: Gestión)
+    // 2. Tabla de Departamentos (Independiente)
+    db.run(`CREATE TABLE IF NOT EXISTS departamentos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      numero TEXT UNIQUE NOT NULL
+    )`);
+
+    // 3. Tabla de Inquilinos
     db.run(`CREATE TABLE IF NOT EXISTS inquilinos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nombres TEXT NOT NULL,
       apellidos TEXT NOT NULL,
       genero TEXT,
-      dni TEXT UNIQUE,
+      dni TEXT UNIQUE NOT NULL,
       telefono TEXT,
       departamento TEXT NOT NULL
     )`);
 
-    // 3. Tabla de Lecturas e Historial (Área 2 y 3: Cálculo y Registro)
-    db.run(`CREATE TABLE IF NOT EXISTS registros_servicios (
+    // 4. Historial de Recibos Calculados por Mes (Ponderado por días)
+    db.run(`CREATE TABLE IF NOT EXISTS recibos_mensuales (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       departamento TEXT NOT NULL,
       mes TEXT NOT NULL,
       anio TEXT NOT NULL,
-      luz_anterior REAL DEFAULT 0,
-      luz_actual REAL NOT NULL,
-      agua_anterior REAL DEFAULT 0,
-      agua_actual REAL NOT NULL,
-      monto_luz REAL DEFAULT 0,
-      monto_agua REAL DEFAULT 0,
-      total_pagar REAL DEFAULT 0,
-      estado_pago TEXT DEFAULT 'Pendiente'
+      dias_ocupados INTEGER NOT NULL,
+      monto_luz REAL NOT NULL,
+      monto_agua REAL NOT NULL,
+      monto_total REAL NOT NULL,
+      estado TEXT DEFAULT 'Pendiente'
     )`);
     
     console.log('Estructura de tablas verificada/creada correctamente.');

@@ -1,7 +1,10 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
-  // Aquí definirán las funciones para comunicarse con el backend más adelante
   enviarLogin: (datos) => ipcRenderer.invoke('auth:login', datos),
-  guardarInquilino: (datos) => ipcRenderer.invoke('db:guardarInquilino', datos)
+  obtenerInquilinos: () => ipcRenderer.invoke('inquilinos:listar'),
+  guardarInquilino: (datos) => ipcRenderer.invoke('inquilinos:crear', datos),
+  eliminarInquilino: (id) => ipcRenderer.invoke('inquilinos:borrar', id),
+  guardarRecibosMes: (listaRecibos) => ipcRenderer.invoke('recibos:guardar-mes', listaRecibos),
+  actualizarInquilino: (id, datos) => ipcRenderer.invoke('inquilinos:actualizar', { id, ...datos })
 });
