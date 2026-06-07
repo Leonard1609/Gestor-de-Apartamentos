@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const db = require('./backend/database/connection.js');
+require('./backend/ipcHandlers.js');
 
 let mainWindow;
 
